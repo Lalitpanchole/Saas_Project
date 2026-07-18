@@ -88,7 +88,7 @@ async function updateMatrix(req, res, next) {
 
         await tx.rolePermission.upsert({
           where: {
-            roleMenuIdx: {
+            roleId_menuId: {
               roleId: Number(item.roleId),
               menuId: Number(item.menuId),
             },
