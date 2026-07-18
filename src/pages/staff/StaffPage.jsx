@@ -24,6 +24,7 @@ export const StaffPage = () => {
     { id: 204, name: 'Amara Okafor', roleTitle: 'Customer Success Specialist', department: 'Support', type: 'Full-time', location: 'New York, NY' },
   ]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingStaffId, setEditingStaffId] = useState(null);
   const [newStaffData, setNewStaffData] = useState({
     name: '',
     roleTitle: '',
@@ -32,23 +33,40 @@ export const StaffPage = () => {
     location: ''
   });
 
+  const openAddModal = () => {
+    setEditingStaffId(null);
+    setNewStaffData({ name: '', roleTitle: '', department: '', type: 'Full-time', location: '' });
+    setIsAddModalOpen(true);
+  };
+
+  const openEditModal = (s) => {
+    setEditingStaffId(s.id);
+    setNewStaffData({ ...s });
+    setIsAddModalOpen(true);
+  };
+
   const handleAddSubmit = () => {
     if (!newStaffData.name) {
       toast.error('Name is required');
       return;
     }
-    const newMember = {
-      id: Date.now(),
-      name: newStaffData.name,
-      roleTitle: newStaffData.roleTitle || 'Associate Consultant',
-      department: newStaffData.department || 'Operations',
-      type: newStaffData.type || 'Contractor',
-      location: newStaffData.location || 'Remote',
-    };
-    setStaff([newMember, ...staff]);
-    toast.success(`Staff member "${newStaffData.name}" registered.`);
+
+    if (editingStaffId) {
+      setStaff(staff.map(s => s.id === editingStaffId ? { ...s, ...newStaffData } : s));
+      toast.success(`Staff member "${newStaffData.name}" updated successfully.`);
+    } else {
+      const newMember = {
+        id: Date.now(),
+        name: newStaffData.name,
+        roleTitle: newStaffData.roleTitle || 'Associate Consultant',
+        department: newStaffData.department || 'Operations',
+        type: newStaffData.type || 'Contractor',
+        location: newStaffData.location || 'Remote',
+      };
+      setStaff([newMember, ...staff]);
+      toast.success(`Staff member "${newStaffData.name}" registered.`);
+    }
     setIsAddModalOpen(false);
-    setNewStaffData({ name: '', roleTitle: '', department: '', type: 'Full-time', location: '' });
   };
 
   const handleDelete = (id, name) => {
@@ -69,7 +87,7 @@ export const StaffPage = () => {
         </div>
 
         {canCreate('staff') ? (
-          <button onClick={() => setIsAddModalOpen(true)} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
+          <button onClick={openAddModal} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Add Staff Member</span>
           </button>
@@ -117,7 +135,7 @@ export const StaffPage = () => {
                   <td className="text-end px-4">
                     <div className="d-flex align-items-center justify-content-end gap-2">
                       {canUpdate('staff') ? (
-                        <button onClick={() => toast.info(`Editing ${s.name}...`)} className="btn btn-sm btn-outline-secondary">
+                        <button onClick={() => openEditModal(s)} className="btn btn-sm btn-outline-secondary">
                           <FaEdit />
                         </button>
                       ) : (
@@ -149,7 +167,7 @@ export const StaffPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content border-0 shadow">
               <div className="modal-header border-bottom-0 pb-0">
-                <h5 className="modal-title fw-bold">Add New Staff Member</h5>
+                <h5 className="modal-title fw-bold">{editingStaffId ? 'Edit Staff Member' : 'Add New Staff Member'}</h5>
                 <button type="button" className="btn-close" onClick={() => setIsAddModalOpen(false)}></button>
               </div>
               <div className="modal-body">
@@ -180,7 +198,7 @@ export const StaffPage = () => {
               </div>
               <div className="modal-footer border-top-0 pt-0">
                 <button type="button" className="btn btn-light" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
-                <button type="button" className="btn btn-secondary text-white" onClick={handleAddSubmit}>Save</button>
+                <button type="button" className="btn btn-secondary text-white" onClick={handleAddSubmit}>{editingStaffId ? 'Update' : 'Save'}</button>
               </div>
             </div>
           </div>

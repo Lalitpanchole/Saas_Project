@@ -24,20 +24,50 @@ export const ClientsPage = () => {
     { id: 103, name: 'Vanguard Healthcare Corp', contact: 'Dr. Elena Rostova', email: 'elena@vanguardhealth.org', status: 'Onboarding', contractValue: '$240,000 / yr' },
     { id: 104, name: 'Summit Retail Partners', contact: 'David Kim', email: 'dkim@summitretail.com', status: 'Active', contractValue: '$64,000 / yr' },
   ]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingClientId, setEditingClientId] = useState(null);
+  const [newClientData, setNewClientData] = useState({
+    name: '',
+    contact: '',
+    email: '',
+    status: 'Onboarding',
+    contractValue: ''
+  });
 
-  const handleAdd = () => {
-    const name = window.prompt('Enter new client organization name:');
-    if (!name) return;
-    const newClient = {
-      id: Date.now(),
-      name,
-      contact: 'Assigned Account Mgr',
-      email: `contact@${name.toLowerCase().replace(/[^a-z]+/g, '')}.com`,
-      status: 'Onboarding',
-      contractValue: '$50,000 / yr',
-    };
-    setClients([newClient, ...clients]);
-    toast.success(`Client "${name}" added to pipeline.`);
+  const openAddModal = () => {
+    setEditingClientId(null);
+    setNewClientData({ name: '', contact: '', email: '', status: 'Onboarding', contractValue: '' });
+    setIsAddModalOpen(true);
+  };
+
+  const openEditModal = (client) => {
+    setEditingClientId(client.id);
+    setNewClientData({ ...client });
+    setIsAddModalOpen(true);
+  };
+
+  const handleAddSubmit = () => {
+    if (!newClientData.name) {
+      toast.error('Client name is required');
+      return;
+    }
+    
+    if (editingClientId) {
+      setClients(clients.map(c => c.id === editingClientId ? { ...c, ...newClientData } : c));
+      toast.success(`Client "${newClientData.name}" updated successfully.`);
+    } else {
+      const newClient = {
+        id: Date.now(),
+        name: newClientData.name,
+        contact: newClientData.contact || 'Assigned Account Mgr',
+        email: newClientData.email || `contact@${newClientData.name.toLowerCase().replace(/[^a-z]+/g, '')}.com`,
+        status: newClientData.status || 'Onboarding',
+        contractValue: newClientData.contractValue || '$50,000 / yr',
+      };
+      setClients([newClient, ...clients]);
+      toast.success(`Client "${newClientData.name}" added to pipeline.`);
+    }
+    setIsAddModalOpen(false);
   };
 
   const handleDelete = (id, name) => {
@@ -58,7 +88,7 @@ export const ClientsPage = () => {
         </div>
 
         {canCreate('clients') ? (
-          <button onClick={handleAdd} className="btn btn-success d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
+          <button onClick={openAddModal} className="btn btn-success d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Add Client</span>
           </button>
@@ -106,7 +136,7 @@ export const ClientsPage = () => {
                   <td className="text-end px-4">
                     <div className="d-flex align-items-center justify-content-end gap-2">
                       {canUpdate('clients') ? (
-                        <button onClick={() => toast.info(`Editing ${client.name}...`)} className="btn btn-sm btn-outline-success">
+                        <button onClick={() => openEditModal(client)} className="btn btn-sm btn-outline-success">
                           <FaEdit />
                         </button>
                       ) : (
@@ -132,6 +162,48 @@ export const ClientsPage = () => {
           </table>
         </div>
       </div>
+
+      {isAddModalOpen && (
+        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow">
+              <div className="modal-header border-bottom-0 pb-0">
+                <h5 className="modal-title fw-bold">{editingClientId ? 'Edit Client' : 'Add New Client'}</h5>
+                <button type="button" className="btn-close" onClick={() => setIsAddModalOpen(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Organization Name</label>
+                  <input type="text" className="form-control" value={newClientData.name} onChange={(e) => setNewClientData({...newClientData, name: e.target.value})} placeholder="e.g. Acme Corp" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Primary Contact</label>
+                  <input type="text" className="form-control" value={newClientData.contact} onChange={(e) => setNewClientData({...newClientData, contact: e.target.value})} placeholder="e.g. Jane Doe" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Email Address</label>
+                  <input type="email" className="form-control" value={newClientData.email} onChange={(e) => setNewClientData({...newClientData, email: e.target.value})} placeholder="e.g. contact@acme.com" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Status</label>
+                  <select className="form-select" value={newClientData.status} onChange={(e) => setNewClientData({...newClientData, status: e.target.value})}>
+                    <option value="Onboarding">Onboarding</option>
+                    <option value="Active">Active</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Annual Contract Value</label>
+                  <input type="text" className="form-control" value={newClientData.contractValue} onChange={(e) => setNewClientData({...newClientData, contractValue: e.target.value})} placeholder="e.g. $50,000 / yr" />
+                </div>
+              </div>
+              <div className="modal-footer border-top-0 pt-0">
+                <button type="button" className="btn btn-light" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                <button type="button" className="btn btn-success text-white" onClick={handleAddSubmit}>{editingClientId ? 'Update' : 'Save'}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
