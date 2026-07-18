@@ -57,12 +57,12 @@ export const StaffPage = () => {
         </div>
 
         {canCreate('staff') ? (
-          <button onClick={handleAdd} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full">
+          <button onClick={handleAdd} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Add Staff Member</span>
           </button>
         ) : (
-          <button className="btn btn-secondary opacity-50 d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full" disabled title="Requires canCreate('staff') permission">
+          <button className="btn btn-secondary opacity-50 d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full mt-2 mt-sm-0" disabled title="Requires canCreate('staff') permission">
             <FaPlus />
             <span>Add Staff Record (Locked)</span>
           </button>

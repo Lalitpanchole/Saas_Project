@@ -139,7 +139,7 @@ export const UsersPage = () => {
         </div>
 
         {canCreate('users') && (
-          <button onClick={handleOpenCreate} className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full">
+          <button onClick={handleOpenCreate} className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full mt-2 mt-sm-0">
             <FaUserPlus />
             <span>Add New User</span>
           </button>
@@ -167,7 +167,7 @@ export const UsersPage = () => {
             </div>
           </div>
 
-          <div className="col-6 col-md-3">
+          <div className="col-12 col-md-3">
             <select
               className="form-select"
               value={roleId}
@@ -185,7 +185,7 @@ export const UsersPage = () => {
             </select>
           </div>
 
-          <div className="col-6 col-md-4 d-flex gap-2">
+          <div className="col-12 col-md-4 d-flex gap-2">
             <select
               className="form-select"
               value={status}

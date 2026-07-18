@@ -5,7 +5,7 @@
  * top navigation bar with user profile actions, and main content canvas.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   FaBars,
@@ -44,11 +44,25 @@ const getMenuIcon = (menu) => {
 };
 
 export const DashboardLayout = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 992);
   const { user, role, menus, logout, isSuperAdmin } = useAuth();
   const { theme } = useTheme();
   const { canView } = usePermissions();
   const navigate = useNavigate();
+
+  // Add resize listener to collapse sidebar when window shrinks below 992px
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 992) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = async () => {
     await logout();

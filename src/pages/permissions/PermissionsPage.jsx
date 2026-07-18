@@ -94,7 +94,7 @@ export const PermissionsPage = () => {
         {canUpdate('permissions') && (
           <button
             onClick={handleSaveAll}
-            className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm btn-mobile-full"
+            className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm btn-mobile-full mt-2 mt-sm-0"
             disabled={saving || loading}
           >
             {saving ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /> : <FaSave />}

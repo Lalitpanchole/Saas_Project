@@ -58,12 +58,12 @@ export const ClientsPage = () => {
         </div>
 
         {canCreate('clients') ? (
-          <button onClick={handleAdd} className="btn btn-success d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full">
+          <button onClick={handleAdd} className="btn btn-success d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Add Client</span>
           </button>
         ) : (
-          <button className="btn btn-secondary opacity-50 d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full" disabled title="Requires canCreate('clients') permission">
+          <button className="btn btn-secondary opacity-50 d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full mt-2 mt-sm-0" disabled title="Requires canCreate('clients') permission">
             <FaPlus />
             <span>Onboard Client (Locked)</span>
           </button>

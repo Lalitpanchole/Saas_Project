@@ -99,7 +99,7 @@ export const RolesPage = () => {
         </div>
 
         {canCreate('roles') && (
-          <button onClick={handleOpenCreate} className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full">
+          <button onClick={handleOpenCreate} className="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2 align-self-md-start btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Create Custom Tier</span>
           </button>

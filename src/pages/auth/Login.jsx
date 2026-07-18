@@ -156,19 +156,19 @@ export const Login = () => {
 
   return (
     <div>
-      <h4 className="fw-bold mb-1 text-dark">Sign In to Account</h4>
-      <p className="text-muted small mb-4">Please enter your login details to access the dashboard.</p>
+      <h4 className="fw-bold mb-1" style={{ color: '#111827' }}>Sign In to Account</h4>
+      <p className="text-muted mb-4" style={{ fontSize: '0.9rem' }}>Please enter your login details to access the dashboard.</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label small fw-semibold text-secondary">Email Address</label>
+          <label className="form-label fw-medium mb-1" style={{ fontSize: '0.875rem', color: '#374151' }}>Email Address</label>
           <div className="input-group">
-            <span className="input-group-text bg-light border-end-0 text-muted">
-              <FaEnvelope />
+            <span className="input-group-text bg-transparent text-muted">
+              <FaEnvelope size={14} />
             </span>
             <input
               type="email"
-              className="form-control border-start-0 ps-0"
+              className="form-control border-start-0 ps-2"
               placeholder="name@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -179,19 +179,19 @@ export const Login = () => {
         </div>
 
         <div className="mb-3">
-          <div className="d-flex justify-content-between align-items-center">
-            <label className="form-label small fw-semibold text-secondary mb-0">Password</label>
-            <Link to="/forgot-password" className="small text-decoration-none text-primary fw-medium">
+          <div className="d-flex justify-content-between align-items-center mb-1">
+            <label className="form-label fw-medium mb-0" style={{ fontSize: '0.875rem', color: '#374151' }}>Password</label>
+            <Link to="/forgot-password" style={{ fontSize: '0.8rem', color: '#6366f1', textDecoration: 'none', fontWeight: 500 }}>
               Forgot Password?
             </Link>
           </div>
-          <div className="input-group mt-1">
-            <span className="input-group-text bg-light border-end-0 text-muted">
-              <FaLock />
+          <div className="input-group">
+            <span className="input-group-text bg-transparent text-muted">
+              <FaLock size={14} />
             </span>
             <input
               type={showPassword ? 'text' : 'password'}
-              className="form-control border-start-0 border-end-0 ps-0"
+              className="form-control border-start-0 border-end-0 ps-2"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -200,26 +200,27 @@ export const Login = () => {
             />
             <button
               type="button"
-              className="btn bg-light border border-start-0 text-secondary px-3"
+              className="input-group-text password-toggle px-3"
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
               title={showPassword ? 'Hide password' : 'Show password'}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
             </button>
           </div>
         </div>
 
-        <div className="mb-3 form-check">
+        <div className="mb-4 form-check d-flex align-items-center gap-2">
           <input
             type="checkbox"
-            className="form-check-input"
+            className="form-check-input mt-0"
             id="rememberMe"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
             disabled={submitting}
+            style={{ cursor: 'pointer' }}
           />
-          <label className="form-check-label small text-muted" htmlFor="rememberMe">
+          <label className="form-check-label text-muted" htmlFor="rememberMe" style={{ fontSize: '0.875rem', cursor: 'pointer', userSelect: 'none' }}>
             Remember me on this device
           </label>
         </div>
@@ -229,31 +230,38 @@ export const Login = () => {
           <div id="recaptcha-widget-container" className="mb-4 d-flex justify-content-center"></div>
         ) : (
           <div
-            className={`p-3 rounded-3 mb-4 border d-flex align-items-center justify-content-between shadow-sm ${
-              recaptchaChecked ? 'bg-light border-success border-opacity-50' : 'bg-light border-secondary border-opacity-25'
-            }`}
-            style={{ cursor: 'pointer' }}
+            className="p-3 mb-4 rounded-3 border d-flex align-items-center justify-content-between"
+            style={{ 
+              cursor: 'pointer',
+              backgroundColor: '#fafafa',
+              borderColor: recaptchaChecked ? '#a7f3d0' : '#f3f4f6',
+              transition: 'all 0.2s ease'
+            }}
             onClick={() => !submitting && setRecaptchaChecked(!recaptchaChecked)}
           >
             <div className="d-flex align-items-center gap-3">
               <div
-                className={`rounded-1 d-flex align-items-center justify-content-center border ${
-                  recaptchaChecked ? 'bg-success text-white border-success' : 'bg-white text-transparent border-secondary'
-                }`}
-                style={{ width: 24, height: 24 }}
+                className={`rounded flex-shrink-0 d-flex align-items-center justify-content-center border`}
+                style={{ 
+                  width: 22, 
+                  height: 22, 
+                  backgroundColor: recaptchaChecked ? '#10b981' : '#fff',
+                  borderColor: recaptchaChecked ? '#10b981' : '#d1d5db',
+                  transition: 'all 0.2s ease'
+                }}
               >
-                <FaCheckCircle className={recaptchaChecked ? 'text-white' : 'd-none'} style={{ fontSize: 14 }} />
+                <FaCheckCircle className={recaptchaChecked ? 'text-white' : 'd-none'} style={{ fontSize: 12 }} />
               </div>
               <div>
-                <div className="fw-semibold small text-dark mb-0">I'm not a robot</div>
+                <div className="fw-medium text-dark mb-0" style={{ fontSize: '0.85rem' }}>I'm not a robot</div>
                 <div className="text-muted" style={{ fontSize: '0.7rem' }}>
                   Security Verification (Local Dev Mode)
                 </div>
               </div>
             </div>
             <div className="text-end">
-              <FaRobot className="text-secondary fs-4 opacity-75" />
-              <div className="text-muted fw-bold" style={{ fontSize: '0.6rem', letterSpacing: 0.5 }}>
+              <FaRobot className="text-secondary opacity-50" size={20} />
+              <div className="text-muted fw-bold mt-1" style={{ fontSize: '0.55rem', letterSpacing: 0.5 }}>
                 reCAPTCHA
               </div>
             </div>
@@ -262,23 +270,23 @@ export const Login = () => {
 
         <button
           type="submit"
-          className="btn btn-primary-custom w-100 d-flex align-items-center justify-content-center gap-2 py-2 mb-3"
+          className="btn btn-primary-custom w-100 d-flex align-items-center justify-content-center gap-2 mb-4"
           disabled={submitting}
         >
           {submitting ? (
             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
           ) : (
             <>
-              <FaSignInAlt />
+              <FaSignInAlt size={14} />
               <span>Sign In</span>
             </>
           )}
         </button>
 
-        <div className="d-flex align-items-center my-3">
-          <hr className="flex-grow-1 border-secondary border-opacity-25" />
-          <span className="px-3 small text-muted fw-medium">OR</span>
-          <hr className="flex-grow-1 border-secondary border-opacity-25" />
+        <div className="d-flex align-items-center my-4">
+          <hr className="flex-grow-1 m-0" style={{ borderColor: '#e5e7eb' }} />
+          <span className="px-3 text-muted fw-medium" style={{ fontSize: '0.75rem' }}>OR</span>
+          <hr className="flex-grow-1 m-0" style={{ borderColor: '#e5e7eb' }} />
         </div>
 
         {/* Official Google Sign-In button container rendered by SDK */}
