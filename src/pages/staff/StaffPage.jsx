@@ -23,20 +23,32 @@ export const StaffPage = () => {
     { id: 203, name: 'Robert Miller', roleTitle: 'Security Compliance Auditor', department: 'Legal & Sec', type: 'Contractor', location: 'Remote (UK)' },
     { id: 204, name: 'Amara Okafor', roleTitle: 'Customer Success Specialist', department: 'Support', type: 'Full-time', location: 'New York, NY' },
   ]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newStaffData, setNewStaffData] = useState({
+    name: '',
+    roleTitle: '',
+    department: '',
+    type: 'Full-time',
+    location: ''
+  });
 
-  const handleAdd = () => {
-    const name = window.prompt('Enter new staff member name:');
-    if (!name) return;
+  const handleAddSubmit = () => {
+    if (!newStaffData.name) {
+      toast.error('Name is required');
+      return;
+    }
     const newMember = {
       id: Date.now(),
-      name,
-      roleTitle: 'Associate Consultant',
-      department: 'Operations',
-      type: 'Contractor',
-      location: 'Remote',
+      name: newStaffData.name,
+      roleTitle: newStaffData.roleTitle || 'Associate Consultant',
+      department: newStaffData.department || 'Operations',
+      type: newStaffData.type || 'Contractor',
+      location: newStaffData.location || 'Remote',
     };
     setStaff([newMember, ...staff]);
-    toast.success(`Staff member "${name}" registered.`);
+    toast.success(`Staff member "${newStaffData.name}" registered.`);
+    setIsAddModalOpen(false);
+    setNewStaffData({ name: '', roleTitle: '', department: '', type: 'Full-time', location: '' });
   };
 
   const handleDelete = (id, name) => {
@@ -57,7 +69,7 @@ export const StaffPage = () => {
         </div>
 
         {canCreate('staff') ? (
-          <button onClick={handleAdd} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
+          <button onClick={() => setIsAddModalOpen(true)} className="btn btn-secondary d-flex align-items-center justify-content-center gap-2 align-self-md-start shadow-sm text-white btn-mobile-full mt-2 mt-sm-0">
             <FaPlus />
             <span>Add Staff Member</span>
           </button>
@@ -131,6 +143,49 @@ export const StaffPage = () => {
           </table>
         </div>
       </div>
+
+      {isAddModalOpen && (
+        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow">
+              <div className="modal-header border-bottom-0 pb-0">
+                <h5 className="modal-title fw-bold">Add New Staff Member</h5>
+                <button type="button" className="btn-close" onClick={() => setIsAddModalOpen(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Name</label>
+                  <input type="text" className="form-control" value={newStaffData.name} onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})} placeholder="e.g. John Doe" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Role Title</label>
+                  <input type="text" className="form-control" value={newStaffData.roleTitle} onChange={(e) => setNewStaffData({...newStaffData, roleTitle: e.target.value})} placeholder="e.g. Software Engineer" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Department</label>
+                  <input type="text" className="form-control" value={newStaffData.department} onChange={(e) => setNewStaffData({...newStaffData, department: e.target.value})} placeholder="e.g. Engineering" />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Employment Type</label>
+                  <select className="form-select" value={newStaffData.type} onChange={(e) => setNewStaffData({...newStaffData, type: e.target.value})}>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contractor">Contractor</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Location</label>
+                  <input type="text" className="form-control" value={newStaffData.location} onChange={(e) => setNewStaffData({...newStaffData, location: e.target.value})} placeholder="e.g. New York, NY" />
+                </div>
+              </div>
+              <div className="modal-footer border-top-0 pt-0">
+                <button type="button" className="btn btn-light" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                <button type="button" className="btn btn-secondary text-white" onClick={handleAddSubmit}>Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
